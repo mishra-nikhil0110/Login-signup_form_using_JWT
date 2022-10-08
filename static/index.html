@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title> Sign up / Login Form</title>
+	<link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+	<!-- partial:index.partial.html -->
+	<!DOCTYPE html>
+	<html>
+
+	<head>
+		<!-- <title>Slide Navbar</title>
+	<link rel="stylesheet" type="text/css" href="slide navbar style.css"> -->
+		<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+	</head>
+
+	<body>
+		<div class="main">
+			<input type="checkbox" id="chk" aria-hidden="true">
+
+			<div class="signup">
+				<form id="reg-form">
+					<label for="chk" aria-hidden="true">Sign up</label>
+					<input type="text" autocomplete="off" id="username" placeholder="Username" />
+					<input type="password" autocomplete="off" id="password" placeholder="Password" />
+					<button>Sign up</button>
+				</form>
+			</div>
+
+			<div class="login">
+				<form id="login">
+					<label for="chk" aria-hidden="true">Login</label>
+
+
+					<input type="text" autocomplete="off" id="username_l" placeholder="Username" />
+					<input type="password" autocomplete="off" id="password_l" placeholder="Password" />
+
+					<button>Login</button>
+				</form>
+			</div>
+		</div>
+		<script>
+
+			// <!--for registerUser-->
+			const form = document.getElementById('reg-form')
+			form.addEventListener('submit', registerUser)
+
+			async function registerUser(event) {
+				event.preventDefault()
+				const username = document.getElementById('username').value
+				const password = document.getElementById('password').value
+
+				const result = await fetch('/api/register', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						username,
+						password
+					})
+				}).then((res) => res.json())
+
+				if (result.status === 'ok') {
+
+					alert('Success')
+				} else {
+					alert(result.error)
+				}
+			}
+			// For login   the user 
+
+
+			const login_form = document.getElementById('login')
+			login_form.addEventListener('submit', login)
+
+			async function login(event) {
+				event.preventDefault()
+				const username = document.getElementById('username_l').value
+				const password = document.getElementById('password_l').value
+
+				const result = await fetch('/api/login', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						username,
+						password
+					})
+				}).then((res) => res.json())
+
+				if (result.status === 'ok') {
+					// everythign went fine
+					console.log('Got the token: ', result.data)
+					localStorage.setItem('token', result.data)
+					alert('Success')
+				} else {
+					alert(result.error)
+				}
+			}
+
+
+
+		</script>
+	</body>
+
+	</html>
